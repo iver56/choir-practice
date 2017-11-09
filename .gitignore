@@ -1,0 +1,6 @@
+.idea
+*.pyc
+api/settings/local.py
+venv/*
+media/*
+test_media/*
