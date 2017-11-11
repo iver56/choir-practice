@@ -5,6 +5,18 @@
   <title>Songs</title>
 </head>
 <body>
-Songs list goes here
+Songs:
+
+{% if songs %}
+<ul>
+  {% for song in songs %}
+  <li>
+    {{ song.name }}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+
 </body>
 </html>
