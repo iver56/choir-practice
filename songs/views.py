@@ -2,13 +2,19 @@
 from __future__ import unicode_literals
 
 from django.http import HttpResponse
-from django.template import Context
 from django.template.loader import get_template
+
+from songs.models import Song
 
 
 def index(request):
     template = get_template('index.html')
-    context = {}
+
+    songs = Song.objects.all()
+
+    context = {
+        'songs': songs
+    }
     html = template.render(context)
     return HttpResponse(html)
 
