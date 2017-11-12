@@ -5,4 +5,10 @@ from django.contrib import admin
 
 from songs.models import Song
 
-admin.site.register(Song)
+
+class SongAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+
+
+admin.site.register(Song, SongAdmin)
