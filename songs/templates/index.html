@@ -11,7 +11,7 @@ Songs:
 <ul>
   {% for song in songs %}
   <li>
-    {{ song.name }}
+    <a href="/song/{{ song.id }}/">{{ song.name }}</a>
   </li>
   {% endfor %}
 </ul>
