@@ -2,9 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Midi player</title>
+
+  {% load static %}
+  <base href="{% get_static_prefix %}">
+
+  <script>
+    SONG = {
+      id: {{ song.id }},
+      name: "{{ song.name }}",
+      midi_file: "{{ song.midi_file }}"
+    };
+    MEDIA_ROOT_URL = "/uploads/";
+  </script>
+
+  <script src="lib/modernizr-custom.js"></script>
+  <script>
+    if (!Modernizr.arrow || !Modernizr.templatestrings) {
+      alert(
+        'Error: This browser does not properly support ES6. Therefore, this web app may not work properly.' +
+        ' Please use a more modern browser.'
+      );
+    } else if (!Modernizr.webaudio) {
+      alert(
+        'Error: This browser does not support Web Audio API. Therefore, this web app may not work properly.' +
+        ' Please use a more modern browser.'
+      );
+    } else if (!Modernizr.canvas) {
+      alert(
+        'Error: This browser does not support canvas. Therefore, this web app may not work properly.' +
+        ' Please use a more modern browser.'
+      )
+    }
+  </script>
+  <script src="lib/Tone.js"></script>
+  <script src="lib/MidiConvert.js"></script>
+  <script src="lib/vue.js"></script>
+  <script src="src/filters.js"></script>
+  <script src="src/draw.js"></script>
+  <script src="src/helpers.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 <body>
-Player goes here
+{% verbatim %}
+<div class="wrapper">
+  <div class="sidebar" id="app" v-cloak>
+    <!--<header>C# Player</header>-->
+    <hr>
+    <div class="channel-list">
+      <div class="channel no-select" v-for="(channel, index) in channels" v-on:click="toggleChannel(index)">
+        <span class="channel-icon"><img v-bind:src="'img/' + channel.icon"></span>
+        <span class="channel-name" v-bind:title="channel.track.name">{{ channel.track.name }}</span>
+        <span class="channel-toggle">
+                    <img v-bind:src="channel.isActive ? 'img/flip_switch_on.png' : 'img/flip_switch_off.png'">
+                </span>
+      </div>
+    </div>
+
+    <div class="controls no-select">
+      <hr>
+      <div class="tempo-controls">
+        Tempo:
+        <button v-on:click="decreaseTempo" v-bind:disabled="currentTempo < originalTempo / 2">-</button>
+        <span style="display: inline-block; width: 70px">{{ currentTempo | formatInteger }} bpm</span>
+        <button v-on:click="increaseTempo" v-bind:disabled="currentTempo > originalTempo * 2">+</button>
+      </div>
+      <hr>
+      <img class="image-button" v-bind:src="isPlaying ? 'img/pause.png' : 'img/play.png'" v-on:click="togglePlay">
+      <img class="image-button" src="img/stop.png" v-on:click="stop">
+      <!--<br>{{ time | formatDuration }}-->
+    </div>
+  </div>
+  <div class="canvas-wrapper">
+    <canvas id="piano-roll-canvas"></canvas>
+  </div>
+</div>
+
+<script src="src/app.js"></script>
+
+<div id="preload-01"></div>
+{% endverbatim %}
 </body>
 </html>
