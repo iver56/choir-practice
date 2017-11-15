@@ -18,7 +18,7 @@ let app = new Vue({
     lookAhead: 0
   },
   created: function() {
-    this.synth = new Tone.PolySynth(5).toMaster();
+    this.synth = new Tone.PolySynth(8).toMaster();
     Tone.context.latencyHint = 0.15;
     this.canvas = document.getElementById('piano-roll-canvas');
     this.drawer = new Drawer(this.canvas, this);
@@ -42,22 +42,26 @@ let app = new Vue({
             ordering: 0,
           };
 
-          if (channel.track.name.toLowerCase().indexOf('bass') !== -1) {
+          const trackNameLowerCase = channel.track.name ? channel.track.name.toLowerCase() : null;
+          if (trackNameLowerCase === null) {
+            channel.track.name = 'Unnamed';
+            // leave default
+          } else if (trackNameLowerCase.indexOf('bass') !== -1) {
             channel.icon = `bass.png`;
             channel.ordering = 5;
-          } else if (channel.track.name.toLowerCase().indexOf('bariton') !== -1) {
+          } else if (trackNameLowerCase.indexOf('bariton') !== -1) {
             channel.icon = `baritone.png`;
             channel.ordering = 4;
-          } else if (channel.track.name.toLowerCase().indexOf('tenor') !== -1) {
+          } else if (trackNameLowerCase.indexOf('tenor') !== -1) {
             channel.icon = `tenor.png`;
             channel.ordering = 3;
-          } else if (channel.track.name.toLowerCase().indexOf('alt') !== -1) {
+          } else if (trackNameLowerCase.indexOf('alt') !== -1) {
             channel.icon = `alto.png`;
             channel.ordering = 2;
-          } else if (channel.track.name.toLowerCase().indexOf('sopran') !== -1) {
+          } else if (trackNameLowerCase.indexOf('sopran') !== -1) {
             channel.icon = `soprano.png`;
             channel.ordering = 1;
-          } else if (channel.track.name.toLowerCase().indexOf('solo') !== -1) {
+          } else if (trackNameLowerCase.indexOf('solo') !== -1) {
             channel.icon = `soprano.png`;
             channel.ordering = 0;
           }
