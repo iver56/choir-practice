@@ -10,6 +10,7 @@ function Drawer(canvas, app) {
   this.noteScale = this.noteScaleFactor;  // computed
   this.pianoKeyWidth = 25;
   this.mappedAppTime = 0;  // computed
+  this.channelDrawStartIndexes = {};
 }
 
 Drawer.prototype.draw = function draw(time) {
@@ -24,13 +25,34 @@ Drawer.prototype.draw = function draw(time) {
 
   this.drawNoteGrid();
 
-  for (let channel of this.app.channels) {
+  for (let [channelIndex, channel] of this.app.channels.entries()) {
     if (channel.isActive) {
       this.ctx.save();
       this.ctx.fillStyle = this.noteColors[channel.track.channelNumber];
       this.ctx.lineWidth = 1;
 
-      for (let note of channel.track.notes) {
+      // update note start index (i.e. at what index we start drawing notes for this channel)
+      // this helps avoid drawing many notes that are outside the canvas
+      if (!this.channelDrawStartIndexes[channelIndex]) {
+        this.channelDrawStartIndexes[channelIndex] = 0;
+      }
+      for (let i = this.channelDrawStartIndexes[channelIndex]; i >= 0; i--) {
+        const note = channel.track.notes[i];
+        if (!note) {
+          break;
+        }
+        const noteRectDimensions = this.getNoteRectDimensions(note);
+        if ((noteRectDimensions.x + noteRectDimensions.width) < -3) {
+          this.channelDrawStartIndexes[channelIndex]++;
+          break;
+        } else {
+          this.channelDrawStartIndexes[channelIndex] = i;
+        }
+      }
+
+      const startDrawIndex = Math.max(this.channelDrawStartIndexes[channelIndex] - 1, 0);
+      for (let i = startDrawIndex; i < channel.track.notes.length; i++) {
+        const note = channel.track.notes[i];
         const isWithinBounds = this.drawNote(note);
         if (!isWithinBounds) {
           // No need to keep drawing if the rest of the notes are out of bounds
@@ -68,15 +90,21 @@ Drawer.prototype.drawNoteGrid = function () {
   this.ctx.fillRect(this.pianoKeyWidth, 0, 3, this.canvas.height);
 };
 
-Drawer.prototype.drawNote = function (note) {
-  const x = 3 + this.pianoKeyWidth + (note.time - this.mappedAppTime) * this.noteScale;
-  const y = this.getYByNoteNumber(note.midi);
-  const width = note.duration * this.noteScale;
-  const height = this.heightPerNote;
-  this.ctx.fillRect(x, y, width, height);
-  this.ctx.strokeRect(x, y, width, height);
+Drawer.prototype.getNoteRectDimensions = function (note) {
+  return {
+    x: 3 + this.pianoKeyWidth + (note.time - this.mappedAppTime) * this.noteScale,
+    y: this.getYByNoteNumber(note.midi),
+    width: note.duration * this.noteScale,
+    height: this.heightPerNote,
+  };
+};
 
-  return x < this.canvas.width;  // false if out of bounds
+Drawer.prototype.drawNote = function (note) {
+  const noteRectDimensions = this.getNoteRectDimensions(note);
+  this.ctx.fillRect(noteRectDimensions.x, noteRectDimensions.y, noteRectDimensions.width, noteRectDimensions.height);
+  this.ctx.strokeRect(noteRectDimensions.x, noteRectDimensions.y, noteRectDimensions.width, noteRectDimensions.height);
+
+  return noteRectDimensions.x < this.canvas.width;  // false if out of bounds
 };
 
 Drawer.prototype.getYByNoteNumber = function(noteNumber) {
