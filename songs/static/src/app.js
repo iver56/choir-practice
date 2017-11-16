@@ -50,6 +50,13 @@ let app = new Vue({
           if (trackNameLowerCase === null) {
             channel.track.name = 'Unnamed';
             // leave default
+          } else if (trackNameLowerCase.indexOf('solo') !== -1) {
+            if (trackNameLowerCase.indexOf('tenor') !== -1) {
+              channel.icon = `tenor.png`;
+            } else {
+              channel.icon = `soprano.png`;
+            }
+            channel.ordering = 0;
           } else if (trackNameLowerCase.indexOf('bass') !== -1) {
             channel.icon = `bass.png`;
             channel.ordering = 5;
@@ -65,9 +72,6 @@ let app = new Vue({
           } else if (trackNameLowerCase.indexOf('sopran') !== -1) {
             channel.icon = `soprano.png`;
             channel.ordering = 1;
-          } else if (trackNameLowerCase.indexOf('solo') !== -1) {
-            channel.icon = `soprano.png`;
-            channel.ordering = 0;
           }
 
           channel.endTime = track.duration;
