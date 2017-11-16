@@ -43,7 +43,9 @@ Drawer.prototype.draw = function draw(time) {
         }
         const noteRectDimensions = this.getNoteRectDimensions(note);
         if ((noteRectDimensions.x + noteRectDimensions.width) < -3) {
-          this.channelDrawStartIndexes[channelIndex]++;
+          if (this.channelDrawStartIndexes[channelIndex] < channel.track.notes.length - 2) {
+            this.channelDrawStartIndexes[channelIndex]++;
+          }
           break;
         } else {
           this.channelDrawStartIndexes[channelIndex] = i;
