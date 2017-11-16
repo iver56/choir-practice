@@ -134,7 +134,7 @@ let app = new Vue({
           const timeDiff = (distance / that.drawer.noteScaleFactor) / 2;
           Tone.Transport.seconds = Math.min(
             Math.max(that.transportTimeOnMouseDown + timeDiff, 0),
-            that.endTime - 0.1
+            that.endTime * that.originalTempo / that.currentTempo - 0.1
           );
         }
       }
