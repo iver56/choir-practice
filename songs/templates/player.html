@@ -56,7 +56,7 @@
         <span class="channel-icon"><img v-bind:src="'img/' + channel.icon"></span>
         <span class="channel-name" v-bind:title="channel.track.name">{{ channel.track.name }}</span>
         <span class="channel-toggle">
-          <img v-bind:src="channel.isActive ? 'img/flip_switch_on.png' : 'img/flip_switch_off.png'">
+          <img v-bind:src="channel.isActive ? 'img/flip_switch_on' + (typeof channel.track.channelNumber === 'undefined' ? '' : '_' + channel.track.channelNumber) + '.png' : 'img/flip_switch_off.png'">
         </span>
       </div>
     </div>
