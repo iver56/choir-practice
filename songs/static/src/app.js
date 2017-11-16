@@ -15,7 +15,8 @@ let app = new Vue({
     quarterNoteDuration: null,
     timeStartedPlaying: +new Date(),
     transportTimeWhenStartedPlaying: 0,
-    lookAhead: 0
+    lookAhead: 0,
+    metronomePlayer: null
   },
   created: function() {
     this.synth = new Tone.PolySynth(8).toMaster();
@@ -31,6 +32,9 @@ let app = new Vue({
       that.originalTempo = Tone.Transport.bpm.value = midi.header.bpm;
       that.currentTempo = that.originalTempo;
       that.quarterNoteDuration = 60 / that.originalTempo;  // in seconds
+
+      that.metronomePlayer = new Tone.Player("./sounds/268822__kwahmah-02__woodblock.wav").toMaster();
+      that.metronomePlayer.mute = true;
 
       that.channels = [];
       for (let track of midi.tracks) {
@@ -93,6 +97,20 @@ let app = new Vue({
           }
         }
       }
+      Tone.Transport.scheduleRepeat(function(time){
+        that.metronomePlayer.start(time);
+      }, "4n");
+      let channel = {
+        track: {
+          name: 'Metronome',
+          notes: []
+        },
+        isActive: false,
+        icon: `metronome.png`,
+        ordering: 99,
+      };
+      that.channels.push(channel);
+
       that.channels.sort((a, b) => a.ordering - b.ordering);
 
       that.startTime = Math.min(that.startTime, that.endTime);
@@ -207,7 +225,12 @@ let app = new Vue({
     toggleChannel: function(channelIndex) {
       const channel = this.channels[channelIndex];
       channel.isActive = !channel.isActive;
-      channel.part.mute = !channel.isActive;
+      if (channel.part) {
+        channel.part.mute = !channel.isActive;
+      } else {
+        // This is the metronome
+        this.metronomePlayer.mute = !this.metronomePlayer.mute;
+      }
     },
     decreaseTempo: function() {
       this.currentTempo /= 1.1;
