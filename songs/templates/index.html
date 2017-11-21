@@ -3,18 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <title>Songs</title>
+  <style>
+    td {
+      padding: 5px 15px 5px 0;
+    }
+  </style>
 </head>
 <body>
 Songs:
 
 {% if songs %}
-<ul>
+<table>
   {% for song in songs %}
-  <li>
-    <a href="/song/{{ song.id }}/">{{ song.name }}</a>
-  </li>
+  <tr>
+    <td>{{ song.name }}</td>
+    <td><a href="/song/{{ song.id }}/">Play</a></td>
+    <td><a href="/uploads/{{ song.midi_file }}">Download midi</a></td>
+  </tr>
   {% endfor %}
-</ul>
+</table>
 {% endif %}
 
 
