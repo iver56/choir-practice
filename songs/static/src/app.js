@@ -57,13 +57,13 @@ let app = new Vue({
               channel.icon = `soprano.png`;
             }
             channel.ordering = 0;
-          } else if (trackNameLowerCase.indexOf('bass') !== -1) {
+          } else if (trackNameLowerCase.indexOf('bass') !== -1 || trackNameLowerCase === 'b1' || trackNameLowerCase === 'b2') {
             channel.icon = `bass.png`;
             channel.ordering = 5;
           } else if (trackNameLowerCase.indexOf('bariton') !== -1) {
             channel.icon = `baritone.png`;
             channel.ordering = 4;
-          } else if (trackNameLowerCase.indexOf('tenor') !== -1) {
+          } else if (trackNameLowerCase.indexOf('tenor') !== -1 || trackNameLowerCase === 't1' || trackNameLowerCase === 't2') {
             channel.icon = `tenor.png`;
             channel.ordering = 3;
           } else if (trackNameLowerCase.indexOf('alt') !== -1) {
