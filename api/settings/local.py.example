@@ -3,7 +3,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'choir_practice',
         'USER': 'postgres',
-        'PASSWORD': '***REMOVED***',
+        'PASSWORD': 'example',
         'HOST': 'localhost',
         'PORT': '5432',
     }
