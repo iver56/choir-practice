@@ -19,3 +19,11 @@ Note: You may have to replace "$PWD" with an absolute path to your local choir-p
 * Inside the docker container, run `python manage.py migrate`
 * To spin up a web server with live-reload, run `python manage.py runserver 0.0.0.0:8000`
 * Visit localhost:8000 in your browser
+
+# Run production web server
+
+Build: `docker build -t choir-practice .`
+
+Run docker image: `docker stop choir-practice && docker rm choir-practice && docker run -d -p 80:80 --network choir-practice-network --name="choir-practice" choir-practice`
+
+Now go to http://localhost to see if it works
