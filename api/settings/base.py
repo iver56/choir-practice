@@ -115,3 +115,14 @@ STATICFILES_DIRS = (
 )
 
 MEDIA_URL = '/uploads/'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'choir_practice',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'choir_practice_database',
+        'PORT': '5432',
+    }
+}

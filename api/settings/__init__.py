@@ -3,4 +3,4 @@ from api.settings.base import *
 try:
     from api.settings.local import *
 except ImportError:
-    raise ImportError("Failed to import local settings")
+    print("Warning: Failed to import local settings. Using base settings.")
