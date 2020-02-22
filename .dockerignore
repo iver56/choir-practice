@@ -1,7 +1,6 @@
 .gitattributes
 .git
 .idea
-api/settings/local.py
 api/settings/local.py.example
 .editorconfig
 **/*.pyc
