@@ -23,5 +23,7 @@ COPY . .
 # Use production mode
 RUN sed -i.bak "s|DEBUG = True|DEBUG = False|" api/settings/base.py
 
+RUN python /usr/src/app/manage.py collectstatic --noinput
+
 EXPOSE 80
 CMD ["supervisord", "-n"]
