@@ -28,6 +28,7 @@ email@example.org with your actual email address):
 
 ```
 docker run --detach \
+    --network choir-practice-network \
     --name nginx-proxy \
     --publish 80:80 \
     --publish 443:443 \
@@ -39,6 +40,7 @@ docker run --detach \
     jwilder/nginx-proxy
 
 docker run --detach \
+    --network choir-practice-network \
     --name nginx-proxy-letsencrypt \
     --volumes-from nginx-proxy \
     --volume /var/run/docker.sock:/var/run/docker.sock:ro \
@@ -54,7 +56,7 @@ command shows how to run the docker image. Remember to replace both instances of
 with your actual domain!
 
 ```
-docker stop choir-practice && docker rm choir-practice && docker run -d -p 80:80 \
+docker stop choir-practice && docker rm choir-practice && docker run -d \
     --network choir-practice-network -v /root/choir-practice-media:/usr/src/app/media \
     --env "VIRTUAL_HOST=example.org" \
     --env "LETSENCRYPT_HOST=example.org" \
