@@ -24,6 +24,8 @@ Note: You may have to replace "$PWD" with an absolute path to your local choir-p
 
 Build: `docker build -t choir-practice .`
 
-Run docker image: `docker stop choir-practice && docker rm choir-practice && docker run -d -p 80:80 --network choir-practice-network --name="choir-practice" choir-practice`
+Assuming you want to store all media on the host, at /root/choir-practice-media, here's how to run the docker image:
+
+`docker stop choir-practice && docker rm choir-practice && docker run -d -p 80:80 --network choir-practice-network -v /root/choir-practice-media:/usr/src/app/media --name="choir-practice" choir-practice`
 
 Now go to http://localhost to see if it works
