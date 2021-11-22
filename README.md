@@ -56,10 +56,23 @@ command shows how to run the docker image. Remember to replace both instances of
 with your actual domain!
 
 ```
-docker stop choir-practice && docker rm choir-practice && docker run -d \
+docker run -d \
     --network choir-practice-network -v /root/choir-practice-media:/usr/src/app/media \
     --env "VIRTUAL_HOST=example.org" \
     --env "LETSENCRYPT_HOST=example.org" \
+    --restart always \
+    --name="choir-practice" choir-practice
+```
+
+Or if you have the DB running on the host:
+
+```
+docker run -d \
+    -v /root/choir-practice-media:/usr/src/app/media \
+    --env "VIRTUAL_HOST=example.org" \
+    --env "LETSENCRYPT_HOST=example.org" \
+    --env "DB_HOST=123.456.789.0" \
+    --env "DB_PASSWORD=thatpassword" \
     --restart always \
     --name="choir-practice" choir-practice
 ```

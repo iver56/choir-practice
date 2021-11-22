@@ -26,6 +26,8 @@ SECRET_KEY = "d8!7pbzco49htk0xpek9&%ucdpl+&!_+6ui(_d7&r3xex++&4p"
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost"]
+if "VIRTUAL_HOST" in os.environ:
+    ALLOWED_HOSTS.append(os.environ["VIRTUAL_HOST"])
 
 
 # Application definition
