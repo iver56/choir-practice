@@ -113,8 +113,8 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "choir_practice",
         "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "choir_practice_database",
+        "PASSWORD": os.environ.get("DB_PASSWORD", "postgres"),
+        "HOST": os.environ.get("DB_HOST", "choir_practice_database"),
         "PORT": "5432",
     }
 }
