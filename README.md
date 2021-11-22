@@ -64,7 +64,43 @@ docker run -d \
     --name="choir-practice" choir-practice
 ```
 
-Or if you have the DB running on the host:
+## With postgres running on host
+
+`sudo apt update && sudo apt install postgresql postgresql-contrib`
+
+`sudo su postgres`
+
+`createdb choir_practice`
+
+`sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'thatnewpassword';"`
+
+Then log out of psql and postgres.
+
+Configure postgres so it is available to the docker container:
+
+`nano /etc/postgresql/10/main/pg_hba.conf`
+
+and add
+
+```
+host    choir_practice  postgres        172.17.0.0/16           password
+```
+
+then
+
+`nano /etc/postgresql/10/main/postgresql.conf`
+
+and add
+
+```
+listen_addresses = '*'
+```
+
+`sudo service postgresql restart`
+
+`docker run --entrypoint python -e "DB_HOST=123.456.789.0" -e "DB_PASSWORD=thatpassword" choir-practice manage.py migrate`
+
+Finally start the django container:
 
 ```
 docker run -d \
