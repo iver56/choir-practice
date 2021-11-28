@@ -1,7 +1,7 @@
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'choir_practice',
+        'NAME': 'choir_practice_database',
         'USER': 'postgres',
         'PASSWORD': 'example',
         'HOST': 'localhost',
